@@ -152,22 +152,28 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
             </button>
           ) : (
             <>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleSave()
-                }}
+             <button
+  type="button"
+  onClick={(e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    handleSave()
+  }}
+  onMouseDown={(e) => e.stopPropagation()}
                 className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition"
               >
                 Save
               </button>
               <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setNotes(project.notes || '')
-                  setDeadline(project.deadline || '')
-                  setIsEditing(false)
-                }}
+  type="button"
+  onClick={(e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setNotes(project.notes || '')
+    setDeadline(project.deadline || '')
+    setIsEditing(false)
+  }}
+  onMouseDown={(e) => e.stopPropagation()}
                 className="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-800 px-4 py-2 rounded-lg font-bold text-sm transition"
               >
                 Cancel
