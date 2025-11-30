@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { db } from '@/lib/supabase'
 import StatsBar from '@/components/StatsBar'
 import { motion } from 'framer-motion'
-
+import ProjectCard from '@/components/ProjectCard'
 export default function Dashboard() {
   const [projects, setProjects] = useState([])
   const [filteredProjects, setFilteredProjects] = useState([])
