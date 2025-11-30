@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}
+```
+
+**4. Commit message:** `Add jsconfig.json`
+
+**5. Click "Commit changes"**
+
+---
+
+### File 2: Verify `.gitignore` exists
+
+**1. Click "Add file" → "Create new file"**
+
+**2. Filename:** `.gitignore`
+
+**3. Paste this code:**
+```
+node_modules
+.next
+.env.local
+.env*.local
+.vercel
+*.log
+.DS_Store
