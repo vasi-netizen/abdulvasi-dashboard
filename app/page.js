@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { db } from '@/lib/supabase'
 import StatsBar from '@/components/StatsBar'
+import AddSiteModal from '@/components/AddSiteModal'
 import { motion } from 'framer-motion'
 import ProjectCard from '@/components/ProjectCard'
 export default function Dashboard() {
@@ -234,7 +235,16 @@ export default function Dashboard() {
 </div>
       </div>
 
-    
+{showModal && (
+  <AddSiteModal
+    onClose={() => setShowModal(false)}
+    onSuccess={() => {
+      setShowModal(false)
+      alert('Site added successfully!')
+      loadProjects()
+    }}
+  />
+)}    
     </div>
   )
 }
