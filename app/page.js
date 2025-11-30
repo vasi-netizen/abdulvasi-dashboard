@@ -3,9 +3,6 @@
 import { useState, useEffect } from 'react'
 import { db } from '@/lib/supabase'
 import StatsBar from '@/components/StatsBar'
-import KanbanBoard from '@/components/KanbanBoard'
-import SearchBar from '@/components/SearchBar'
-import AddSiteModal from '@/components/AddSiteModal'
 import { motion } from 'framer-motion'
 
 export default function Dashboard() {
@@ -218,27 +215,26 @@ export default function Dashboard() {
           selectedSite={selectedSite}
         />
 
-        <SearchBar 
-          value={searchQuery}
-          onChange={setSearchQuery}
-        />
+   
 
-        <KanbanBoard
-          projects={filteredProjects}
-          onProjectUpdate={handleProjectUpdate}
-          onBulkUpdate={handleBulkUpdate}
-        />
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {filteredProjects.length === 0 ? (
+    <div className="col-span-full text-center py-20 text-white/60 text-xl">
+      No pending projects. Click Import to load drafts.
+    </div>
+  ) : (
+    filteredProjects.map(project => (
+      <ProjectCard
+        key={project.id}
+        project={project}
+        onUpdate={handleProjectUpdate}
+      />
+    ))
+  )}
+</div>
       </div>
 
-      {showModal && (
-        <AddSiteModal
-          onClose={() => setShowModal(false)}
-          onSuccess={() => {
-            setShowModal(false)
-            alert('Site added successfully!')
-          }}
-        />
-      )}
+    
     </div>
   )
 }
