@@ -99,7 +99,7 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
           className="inline-flex items-center gap-2 text-sm font-bold text-purple-600 hover:text-purple-800 mb-4 group"
         >
           <span>Edit in WordPress</span>
-          <span className="group-hover:translate-x-1 transition-transform">→</span>
+         <span className="group-hover:translate-x-1 transition-transform">&#8594;</span>
         </a>
 
         {!isEditing && deadline && (
