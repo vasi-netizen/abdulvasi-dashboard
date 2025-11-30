@@ -28,7 +28,6 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
   }
 
   const domain = getDomain(project.url).toUpperCase()
-  const isLive = project.live_status === 'publish'
 
   const statusColors = {
     draft: 'from-yellow-400 to-orange-400',
@@ -70,7 +69,6 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
       }`}
     >
       <div className="p-5">
-        {/* Header */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-2">
             <input
@@ -91,12 +89,10 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
           </div>
         </div>
 
-        {/* Title */}
         <h3 className="font-bold text-lg text-slate-800 mb-3 line-clamp-2">
           {project.name}
         </h3>
 
-        {/* Edit Link */}
         
           href={`${project.url}/wp-admin/post.php?post=${project.wordpress_id}&action=edit`}
           target="_blank"
@@ -105,10 +101,9 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
           className="inline-flex items-center gap-2 text-sm font-bold text-purple-600 hover:text-purple-800 mb-4 group"
         >
           <span>Edit in WordPress</span>
-         <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+          <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
         </a>
 
-        {/* Deadline */}
         {!isEditing && deadline && (
           <div className="mb-3 flex items-center gap-2 text-sm">
             <span className="text-slate-600">📅</span>
@@ -118,14 +113,12 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
           </div>
         )}
 
-        {/* Notes Display */}
         {!isEditing && notes && (
           <div className="mb-3 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
             <p className="text-sm text-slate-700 whitespace-pre-wrap">{notes}</p>
           </div>
         )}
 
-        {/* Edit Form */}
         {isEditing && (
           <div className="space-y-3 mb-3" onClick={(e) => e.stopPropagation()}>
             <input
@@ -144,7 +137,6 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
           </div>
         )}
 
-        {/* Actions */}
         <div className="flex gap-2 pt-3 border-t border-slate-200">
           {!isEditing ? (
             <button
@@ -174,14 +166,4 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
                   setDeadline(project.deadline || '')
                   setIsEditing(false)
                 }}
-                className="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-800 px-4 py-2 rounded-lg font-bold text-sm transition"
-              >
-                ✕ Cancel
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  )
-}
+                className
