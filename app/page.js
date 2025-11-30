@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react'
 import { db } from '@/lib/supabase'
 import StatsBar from '@/components/StatsBar'
+import ProjectCard from '@/components/ProjectCard'
 import AddSiteModal from '@/components/AddSiteModal'
 import { motion } from 'framer-motion'
-import ProjectCard from '@/components/ProjectCard'
+
 export default function Dashboard() {
   const [projects, setProjects] = useState([])
   const [filteredProjects, setFilteredProjects] = useState([])
@@ -16,6 +17,8 @@ export default function Dashboard() {
   const [viewMode, setViewMode] = useState('pending')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedSite, setSelectedSite] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 12
 
   useEffect(() => {
     loadProjects()
@@ -63,6 +66,7 @@ export default function Dashboard() {
     }
 
     setFilteredProjects(filtered)
+    setCurrentPage(1)
   }
 
   async function handleSync(silent = false) {
@@ -111,31 +115,11 @@ export default function Dashboard() {
     }
   }
 
-  async function handleProjectUpdate(projectId, updates) {
-    try {
-      await db.updateProject(projectId, updates)
-      await loadProjects()
-    } catch (error) {
-      console.error('Update error:', error)
-      alert('Update failed: ' + error.message)
-    }
-  }
-
-  async function handleBulkUpdate(projectIds, updates) {
-    try {
-      await db.bulkUpdateProjects(projectIds, updates)
-      await loadProjects()
-    } catch (error) {
-      console.error('Bulk update error:', error)
-      alert('Bulk update failed: ' + error.message)
-    }
-  }
-
   const pendingCount = projects.filter(p => p.live_status !== 'publish').length
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 flex items-center justify-center">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -150,59 +134,59 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-orange-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/30 rounded-full filter blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-500/30 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-500/30 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-0 left-0 w-96 h-96 bg-slate-500/10 rounded-full filter blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-indigo-500/10 rounded-full filter blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
       </div>
 
-      <div className="relative z-10 backdrop-blur-xl bg-white/10 border-b border-white/20 sticky top-0">
+      <div className="relative z-10 backdrop-blur-xl bg-slate-900/80 border-b border-slate-700 sticky top-0">
         <div className="max-w-[1600px] mx-auto px-6 py-4">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
             <motion.h1
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="text-3xl font-black bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 bg-clip-text text-transparent"
+              className="text-3xl font-black text-white"
             >
-              ✨ Abdul Vasi Dashboard
+              Abdul Vasi Dashboard
             </motion.h1>
 
             <div className="flex gap-3 flex-wrap items-center">
               <select
                 value={viewMode}
                 onChange={(e) => setViewMode(e.target.value)}
-                className="bg-white/20 backdrop-blur-md border-2 border-white/30 rounded-xl px-4 py-2 text-white font-bold cursor-pointer hover:bg-white/30 transition"
+                className="bg-slate-700 border-2 border-slate-600 rounded-xl px-4 py-2 text-white font-bold cursor-pointer hover:bg-slate-600 transition"
               >
-                <option value="pending" className="text-black">
-                  🔥 Pending ({pendingCount})
+                <option value="pending">
+                  Pending ({pendingCount})
                 </option>
-                <option value="all" className="text-black">
-                  📊 All ({projects.length})
+                <option value="all">
+                  All ({projects.length})
                 </option>
               </select>
 
               <button
                 onClick={() => setShowModal(true)}
-                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white px-5 py-2 rounded-xl font-bold shadow-lg hover:shadow-2xl transition transform hover:scale-105"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl font-bold shadow-lg transition"
               >
-                ➕ Add Site
+                Add Site
               </button>
 
               <button
                 onClick={() => handleSync()}
                 disabled={syncing}
-                className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-5 py-2 rounded-xl font-bold shadow-lg hover:shadow-2xl transition transform hover:scale-105 disabled:opacity-50"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl font-bold shadow-lg transition disabled:opacity-50"
               >
-                {syncing ? '⏳ Syncing...' : '⚡ Sync'}
+                {syncing ? 'Syncing...' : 'Sync'}
               </button>
 
               <button
                 onClick={handleImport}
                 disabled={importing}
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-5 py-2 rounded-xl font-bold shadow-lg hover:shadow-2xl transition transform hover:scale-105 disabled:opacity-50"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl font-bold shadow-lg transition disabled:opacity-50"
               >
-                {importing ? '⏳ Importing...' : '📥 Import'}
+                {importing ? 'Importing...' : 'Import'}
               </button>
             </div>
           </div>
@@ -216,35 +200,66 @@ export default function Dashboard() {
           selectedSite={selectedSite}
         />
 
-   
+        <div className="mb-8">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="🔍 Search projects by name or URL..."
+            className="w-full max-w-2xl mx-auto block bg-slate-800/50 backdrop-blur-xl border-2 border-slate-600 rounded-2xl px-6 py-4 text-white placeholder-slate-400 font-semibold text-lg focus:outline-none focus:ring-4 focus:ring-blue-500/50 focus:border-blue-500 transition shadow-xl"
+          />
+        </div>
 
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  {filteredProjects.length === 0 ? (
-    <div className="col-span-full text-center py-20 text-white/60 text-xl">
-      No pending projects. Click Import to load drafts.
-    </div>
-  ) : (
-    filteredProjects.map(project => (
-      <ProjectCard
-        key={project.id}
-        project={project}
-        onUpdate={handleProjectUpdate}
-      />
-    ))
-  )}
-</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredProjects.length === 0 ? (
+            <div className="col-span-full text-center py-20 text-slate-400 text-xl">
+              No pending projects. Click Import to load drafts.
+            </div>
+          ) : (
+            filteredProjects
+              .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+              .map(project => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                />
+              ))
+          )}
+        </div>
+
+        {filteredProjects.length > itemsPerPage && (
+          <div className="mt-8 flex justify-center items-center gap-4">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-white px-6 py-2 rounded-xl font-bold transition"
+            >
+              ← Previous
+            </button>
+            <span className="text-white font-bold">
+              Page {currentPage} of {Math.ceil(filteredProjects.length / itemsPerPage)}
+            </span>
+            <button
+              onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredProjects.length / itemsPerPage), p + 1))}
+              disabled={currentPage >= Math.ceil(filteredProjects.length / itemsPerPage)}
+              className="bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-white px-6 py-2 rounded-xl font-bold transition"
+            >
+              Next →
+            </button>
+          </div>
+        )}
       </div>
 
-{showModal && (
-  <AddSiteModal
-    onClose={() => setShowModal(false)}
-    onSuccess={() => {
-      setShowModal(false)
-      alert('Site added successfully!')
-      loadProjects()
-    }}
-  />
-)}    
+      {showModal && (
+        <AddSiteModal
+          onClose={() => setShowModal(false)}
+          onSuccess={() => {
+            setShowModal(false)
+            alert('Site added successfully!')
+            loadProjects()
+          }}
+        />
+      )}
     </div>
   )
 }
