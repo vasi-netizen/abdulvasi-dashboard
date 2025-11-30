@@ -11,41 +11,57 @@ export default function AddSiteModal({ onClose, onSuccess }) {
   const [siteName, setSiteName] = useState('')
   const [saving, setSaving] = useState(false)
 
-  async function handleSubmit(e) {
-    e.preventDefault()
+ async function handleSubmit(e) {
+  e.preventDefault()
+  
+  if (!url || !username || !password) {
+    alert('Please fill in all required fields')
+    return
+  }
+
+  try {
+    setSaving(true)
     
-    if (!url || !username || !password) {
-      alert('Please fill in all required fields')
+    let normalizedUrl = url.trim()
+    if (!normalizedUrl.startsWith('http')) {
+      normalizedUrl = 'https://' + normalizedUrl
+    }
+    if (normalizedUrl.endsWith('/')) {
+      normalizedUrl = normalizedUrl.slice(0, -1)
+    }
+
+    // Check if site already exists
+    const existingSites = await db.getWordPressSites()
+    const siteExists = existingSites.some(site => 
+      site.site_url.toLowerCase() === normalizedUrl.toLowerCase()
+    )
+
+    if (siteExists) {
+      alert('⚠️ This WordPress site is already in your dashboard!')
+      setSaving(false)
       return
     }
 
-    try {
-      setSaving(true)
-      
-      // Normalize URL
-      let normalizedUrl = url.trim()
-      if (!normalizedUrl.startsWith('http')) {
-        normalizedUrl = 'https://' + normalizedUrl
-      }
-      if (normalizedUrl.endsWith('/')) {
-        normalizedUrl = normalizedUrl.slice(0, -1)
-      }
+    await db.addWordPressSite({
+      site_url: normalizedUrl,
+      username: username.trim(),
+      app_password: password.trim(),
+      site_name: siteName.trim() || null
+    })
 
-      await db.addWordPressSite({
-        site_url: normalizedUrl,
-        username: username.trim(),
-        app_password: password.trim(),
-        site_name: siteName.trim() || null
-      })
-
-      onSuccess()
-    } catch (error) {
-      console.error('Add site error:', error)
+    onSuccess()
+  } catch (error) {
+    console.error('Add site error:', error)
+    
+    if (error.message && (error.message.includes('duplicate') || error.message.includes('unique constraint'))) {
+      alert('⚠️ This WordPress site is already in your dashboard!')
+    } else {
       alert('Failed to add site: ' + error.message)
-    } finally {
-      setSaving(false)
     }
+  } finally {
+    setSaving(false)
   }
+}
 
   return (
     <AnimatePresence>
