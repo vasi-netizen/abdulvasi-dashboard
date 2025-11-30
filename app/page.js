@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { db } from '@/lib/supabase'
 import StatsBar from '@/components/StatsBar'
 import ProjectCard from '@/components/ProjectCard'
+import ManageSitesModal from '@/components/ManageSitesModal'
 import AddSiteModal from '@/components/AddSiteModal'
 import { motion } from 'framer-motion'
 
@@ -16,6 +17,7 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false)
   const [viewMode, setViewMode] = useState('pending')
   const [searchQuery, setSearchQuery] = useState('')
+  const [showManageSites, setShowManageSites] = useState(false)
   const [selectedSite, setSelectedSite] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 12
@@ -172,6 +174,12 @@ export default function Dashboard() {
               >
                 Add Site
               </button>
+                  <button
+  onClick={() => setShowManageSites(true)}
+  className="bg-slate-600 hover:bg-slate-500 text-white px-5 py-2 rounded-xl font-bold shadow-lg transition"
+>
+  Manage Sites
+</button>
 
               <button
                 onClick={() => handleSync()}
@@ -260,6 +268,14 @@ export default function Dashboard() {
           }}
         />
       )}
+        {showManageSites && (
+  <ManageSitesModal
+    onClose={() => setShowManageSites(false)}
+    onSiteDeleted={() => {
+      loadProjects()
+    }}
+  />
+)}
     </div>
   )
 }
