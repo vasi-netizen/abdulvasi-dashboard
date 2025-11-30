@@ -23,11 +23,19 @@ export async function POST() {
       )
 
       // Filter out existing projects
-      drafts.forEach(draft => {
-        const key = `${draft.url}|${draft.wordpress_id}`
-        if (!existingIds.has(key)) {
-          newProjects.push(draft)
-        }
+    drafts.forEach(draft => {
+  const key = `${draft.url}|${draft.wordpress_id}`
+  if (!existingIds.has(key)) {
+    newProjects.push({
+      name: draft.name,
+      url: draft.url,
+      wordpress_id: draft.wordpress_id,
+      live_status: draft.live_status,
+      internal_status: 'To Do',
+      notes: null,
+      deadline: null
+    })
+  }
       })
     }
 
