@@ -57,7 +57,7 @@ export default function ProjectCard({ project, onUpdate }) {
           {project.name}
         </h3>
 
-        
+                <a
           href={`${project.url}/wp-admin/post.php?post=${project.wordpress_id}&action=edit`}
           target="_blank"
           rel="noopener noreferrer"
