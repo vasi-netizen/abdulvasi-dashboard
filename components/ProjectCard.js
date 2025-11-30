@@ -137,11 +137,15 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
 
         <div className="flex gap-2 pt-3 border-t border-slate-200">
           {!isEditing ? (
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                setIsEditing(true)
-              }}
+           <button
+  type="button"
+  onClick={(e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsEditing(true)
+  }}
+  onMouseDown={(e) => e.stopPropagation()}
+  onTouchStart={(e) => e.stopPropagation()}
               className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition shadow-md"
             >
               Edit Details
