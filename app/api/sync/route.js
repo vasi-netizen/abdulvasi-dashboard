@@ -36,7 +36,7 @@ export async function POST() {
       )
 
       // Delete if trashed or not found
-      if (result.status === 'trash' || result.status === 'not_found') {
+   if (result.status === 'trash' || result.status === 'not_found' || result.status === 'publish') {
         await db.deleteProject(project.id)
         deletedCount++
         continue
