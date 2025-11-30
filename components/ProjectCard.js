@@ -64,9 +64,7 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
       {...attributes}
       {...listeners}
       whileHover={{ scale: 1.02, y: -2 }}
-      className={`bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-lg rounded-2xl shadow-xl border-l-8 ${borderColor} overflow-hidden cursor-grab active:cursor-grabbing ${
-        isSelected ? 'ring-4 ring-yellow-400 shadow-yellow-400/50' : ''
-      }`}
+      className={`bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-lg rounded-2xl shadow-xl border-l-8 ${borderColor} overflow-hidden cursor-grab active:cursor-grabbing ${isSelected ? 'ring-4 ring-yellow-400 shadow-yellow-400/50' : ''}`}
     >
       <div className="p-5">
         <div className="flex items-start justify-between mb-3">
@@ -79,7 +77,7 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
               className="w-5 h-5 rounded cursor-pointer accent-pink-500"
             />
             <span className="text-xs font-black text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-              🌐 {domain}
+              {domain}
             </span>
           </div>
           <div className={`bg-gradient-to-r ${statusGradient} px-3 py-1 rounded-full`}>
@@ -93,7 +91,7 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
           {project.name}
         </h3>
 
-        <a
+        
           href={`${project.url}/wp-admin/post.php?post=${project.wordpress_id}&action=edit`}
           target="_blank"
           rel="noopener noreferrer"
@@ -101,7 +99,7 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
           className="inline-flex items-center gap-2 text-sm font-bold text-purple-600 hover:text-purple-800 mb-4 group"
         >
           <span>Edit in WordPress</span>
-          <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+          <span className="group-hover:translate-x-1 transition-transform">→</span>
         </a>
 
         {!isEditing && deadline && (
@@ -146,7 +144,7 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
               }}
               className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition shadow-md"
             >
-              ✏️ Edit Details
+              Edit Details
             </button>
           ) : (
             <>
@@ -157,7 +155,7 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
                 }}
                 className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-4 py-2 rounded-lg font-bold text-sm transition"
               >
-                💾 Save
+                Save
               </button>
               <button
                 onClick={(e) => {
@@ -166,4 +164,14 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
                   setDeadline(project.deadline || '')
                   setIsEditing(false)
                 }}
-                className
+                className="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-800 px-4 py-2 rounded-lg font-bold text-sm transition"
+              >
+                Cancel
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  )
+}
