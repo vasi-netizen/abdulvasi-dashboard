@@ -118,7 +118,7 @@ export default function ProjectCard({ project, onUpdate, isDragging, isSelected,
         )}
 
         {isEditing && (
-          <div className="space-y-3 mb-3" onClick={(e) => e.stopPropagation()}>
+        <div className="space-y-3 mb-3 bg-slate-50 p-4 rounded-lg border-2 border-purple-300" onClick={(e) => e.stopPropagation()}>
             <input
               type="date"
               value={deadline}
